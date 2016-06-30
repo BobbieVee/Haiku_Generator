@@ -1,12 +1,6 @@
 var fs = require('fs');
 var wordArr = [[],[],[],[],[],[],[],[]];
 
-// console.log(fs.readFileSync('./cmudict.txt'))
-
-
-
-
-
 var cmudictFile = readCmudictFile('./cmudict.txt');
 
 function readCmudictFile(file){
@@ -36,48 +30,43 @@ function formatData(data){
     	if (syllables < 8){
     		wordArr[syllables].push(lineSplit[0]);
     	}
-    	// return WordArr;
+
 	}); 
-
-   function countSyllableWords(){
-   	for (var i=0; i < 8; i++){
-   		// console.log(i);
-   		var randNum = Math.random();
-   		console.log("Number of " + i + ' syllable words = ' + wordArr[i].length + " , first word is \'" + wordArr[i][0] + "\' and Random Word is " + wordArr[i][Math.floor(randNum * wordArr[i].length) ] ); 
-   	}
-   	
-
-   }
-   // countSyllableWords();
-  
-  	// console.log('2 syllable words = ' + wordArr[2].length + " , first word is \'" + wordArr[2][0] + "\'" );  
 }
 
-// formatData(cmudictFile);
-
 var createHaiku = function createHaiku(structure){
-    console.log("this should log a haiku with the structure " + structure);
-
     formatData(cmudictFile);
+
+    function findWord(wordSyllables) {
+		var randNum = Math.random();
+		var newWord = wordArr[wordSyllables][Math.floor(randNum * wordArr[wordSyllables].length)];
+		return newWord;
+    }
 
     function createLine(lineStructure){
     	var finalLine = '';
     	for(var k=0; k<lineStructure.length; k++){
-    		var randNum = Math.random();
-    		finalLine = wordArr[k][Math.floor(randNum * wordArr[k].length)] + ' ';
+
+    		// Find a word that is a good candidate
+    		var wordCandidate = false;
+    		while (wordCandidate == false) {
+    			var newWord = findWord(lineStructure[k])
+    			if (newWord != undefined && newWord.match(/\d/g) == null) {
+    				wordCandidate = true;
+    			}
+    		}
+    		finalLine += newWord + ' ';
     	}
     	return finalLine.trim();
     }
 
     var finalHaiku = '';
     for(var j=0; j<3; j++){
-    	finalHaiku += createLine(structure[j]) + "\n";
+    	var lineArr = structure[j].match(/\d/g);
+    	finalHaiku += createLine(lineArr) + "\n";
     }
-
     return finalHaiku;
 }
-
-
 
 module.exports = createHaiku;
 

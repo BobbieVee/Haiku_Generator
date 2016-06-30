@@ -4,26 +4,32 @@ var structure = process.argv[2];
 
 //Create fileName from filePath.  Create error message.
 var fileName = filePath.split("/").slice(-1).toString();
-var noArgError = 'Error: Please submit a haiku structure as the first argument: \n       Ex: ' + fileName + ' 575 \n'
+var noArgError = '\n\
+Error: Please submit a haiku structure as the first argument. \n\
+       No. of syllables per word seperated by comma.\n\
+       Lines surrounded by brackets and seperated by periods.\n\
+       Ex: ' + fileName + ' [2,1,2].[3,2,3].[2,1,2] \n'
 
 // First argument 'structure' is mandatory
-function testArg(){
-	if (structure === undefined){
-		return noArgError; 
-	} else {
-		return ("  Structure specified for Haiku is " + structure);
-	}
-}	
+if (structure === undefined){
+	console.log(noArgError); 
+} else {
+	//Change input string Arg to Array.
+	structure = structure.split('.')
 
-
-console.log(testArg());
-
-///Change input string Arg to Array.
-structure = structure.split('.')
-
+	//Run the module
+	var createHaiku = require('./haiku');
+	console.log(createHaiku(structure));
+}
+	
 
 
 
-var createHaiku = require('./haiku');
-console.log(createHaiku(structure));
+
+
+
+
+
+
+
 
